@@ -1,6 +1,21 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Status, pairStatus } from '../../types/Status';
+import { filterSlice } from '../../features/filter';
+import { useAppSelector } from '../../app/hooks';
 
 export const TodoFilter: React.FC = () => {
+  const dispatch = useDispatch();
+  const filter = useAppSelector(state => state.filter);
+
+  const selectStatus = (value: Status) =>
+    dispatch(filterSlice.actions.setStatus(value));
+
+  const searchInput = (value: string) =>
+    dispatch(filterSlice.actions.setQuery(value));
+
+  const crearInput = () => dispatch(filterSlice.actions.setQuery(''));
+
   return (
     <form
       className="field has-addons"
@@ -8,10 +23,16 @@ export const TodoFilter: React.FC = () => {
     >
       <p className="control">
         <span className="select">
-          <select data-cy="statusSelect">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="completed">Completed</option>
+          <select
+            data-cy="statusSelect"
+            value={filter.status}
+            onChange={e => selectStatus(e.target.value as Status)}
+          >
+            {pairStatus.map(({ key, value }, i) => (
+              <option key={i} value={key}>
+                {value}
+              </option>
+            ))}
           </select>
         </span>
       </p>
@@ -22,6 +43,8 @@ export const TodoFilter: React.FC = () => {
           type="text"
           className="input"
           placeholder="Search..."
+          onChange={e => searchInput(e.target.value)}
+          value={filter.query}
         />
         <span className="icon is-left">
           <i className="fas fa-magnifying-glass" />
@@ -33,6 +56,7 @@ export const TodoFilter: React.FC = () => {
             data-cy="clearSearchButton"
             type="button"
             className="delete"
+            onClick={crearInput}
           />
         </span>
       </p>
