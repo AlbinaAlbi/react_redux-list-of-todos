@@ -1,6 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { Todo } from '../../../types/Todo';
 import { currentTodoSlice } from '../../../features/currentTodo';
+import { useAppSelector } from '../../../app/hooks';
 
 interface TodoElementProps {
   todo: Todo;
@@ -9,8 +10,10 @@ interface TodoElementProps {
 export const TodoElement: React.FC<TodoElementProps> = ({ todo }) => {
   const completedTodo = todo.completed;
   const dispatch = useDispatch();
-
+  const todoCurrent = useAppSelector(state => state.currentTodo);
   const openTodo = (el: Todo) => dispatch(currentTodoSlice.actions.addTodo(el));
+
+  const isOpenTodo = todo.id === todoCurrent?.id;
 
   return (
     <tr data-cy="todo" className="has-background-info-light?">
@@ -35,7 +38,7 @@ export const TodoElement: React.FC<TodoElementProps> = ({ todo }) => {
       <td className="has-text-right is-vcentered">
         <button data-cy="selectButton" className="button" type="button">
           <span className="icon" onClick={() => openTodo(todo)}>
-            <i className="far fa-eye" />
+            <i className={`far ${isOpenTodo ? 'fa-eye-slash' : 'fa-eye'}`} />
           </span>
         </button>
       </td>

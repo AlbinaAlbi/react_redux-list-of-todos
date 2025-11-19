@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Loader } from '../Loader';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../app/hooks';
-import classNames from 'classnames';
 import { currentTodoSlice } from '../../features/currentTodo';
 import { getUser } from '../../api';
 import { User } from '../../types/User';
@@ -26,30 +25,25 @@ export const TodoModal: React.FC = () => {
     setLoading(true);
     setUser(null);
 
-    const timer = setTimeout(() => {
-      const load = async () => {
-        try {
-          const todos = await getUser(userId);
+    const load = async () => {
+      try {
+        const todos = await getUser(userId);
 
-          setUser(todos);
-        } finally {
-          setLoading(false);
-        }
-      };
+        setUser(todos);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      load();
-    }, 1000);
-
-    return () => clearTimeout(timer);
+    load();
   }, [userId]);
 
+  if (!todo) {
+    return null;
+  }
+
   return (
-    <div
-      className={classNames('modal', {
-        'is-active': userId,
-      })}
-      data-cy="modal"
-    >
+    <div className="modal is-active" data-cy="modal">
       <div className="modal-background" />
 
       {loading || !user ? (
