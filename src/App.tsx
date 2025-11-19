@@ -4,14 +4,11 @@ import { Loader, TodoFilter, TodoList, TodoModal } from './components';
 import { useEffect, useState } from 'react';
 import { getTodos } from './api';
 import { useDispatch } from 'react-redux';
-import { useAppSelector } from './app/hooks';
 import { setTodos } from './features/todos';
 
 export const App = () => {
   const [loading, setLoading] = useState(true);
-
   const dispatch = useDispatch();
-  const todos = useAppSelector(state => state.todos);
 
   useEffect(() => {
     setLoading(true);
@@ -39,9 +36,7 @@ export const App = () => {
               <TodoFilter />
             </div>
 
-            <div className="block">
-              {loading ? <Loader /> : <TodoList todos={todos} />}
-            </div>
+            <div className="block">{loading ? <Loader /> : <TodoList />}</div>
           </div>
         </div>
       </div>

@@ -1,15 +1,11 @@
 /* eslint-disable */
-import React from 'react';
-import { Todo } from '../../types/Todo';
 import { Notification } from './Notification';
 import { TodoElement } from './TodoElement';
 import { useAppSelector } from '../../app/hooks';
 
-interface TodoListProps {
-  todos: Todo[];
-}
-export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
+export const TodoList = () => {
   const filter = useAppSelector(state => state.filter);
+  const todos = useAppSelector(state => state.todos);
 
   const filteredTodos = todos.filter(todo => {
     if (filter.status === 'completed' && !todo.completed) {
